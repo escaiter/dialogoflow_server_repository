@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "dialogflow": "^1.2.0"
+    "@google-cloud/dialogflow": "3.5.0"
   },
   "author": "",
   "license": "ISC"
