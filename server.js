@@ -56,6 +56,4 @@ app.listen(PORT, () => {
 
 // Cliente de Dialogflow con tus credenciales.
 // Esta configuración no necesita estar antes de las rutas.
-const sessionClient = new dialogflow.SessionsClient({
-  keyFilename: path.join(__dirname, "newagent-h9i9-375d5cd22bd0.json"),
-});
+const sessionClient = new dialogflow.SessionsClient();
