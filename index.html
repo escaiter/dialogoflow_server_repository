@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat con Dialogflow</title>
+<style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      font-family: Arial, sans-serif;
+    }
+
+    .chat-container {
+      width: 400px;
+      height: 600px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: #2575fc;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      background: #f7f7f7;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-messages div {
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 8px;
+      max-width: 75%;
+    }
+
+    .user {
+      background: #2575fc;
+      color: white;
+      align-self: flex-end;
+    }
+
+    .bot {
+      background: #e5e5ea;
+      color: black;
+      align-self: flex-start;
+    }
+
+    .chat-input {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+
+    .chat-input input {
+      flex: 1;
+      border: none;
+      padding: 15px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .chat-input button {
+      background: #2575fc;
+      border: none;
+      color: white;
+      padding: 0 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .chat-input button:hover {
+      background: #1a56d6;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">🤖 Chat con Licant</div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <form class="chat-input" id="chat-form">
+      <input id="chat-input" type="text" placeholder="Escribe un mensaje..." autocomplete="off" />
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("chat-form");
+    const input = document.getElementById("chat-input");
+    const messages = document.getElementById("chat-messages");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const message = input.value.trim();
+      if (!message) return;
+
+      // Mostrar mensaje del usuario
+      const userMsg = document.createElement("div");
+      userMsg.textContent = message;
+      userMsg.classList.add("user");
+      messages.appendChild(userMsg);
+      messages.scrollTop = messages.scrollHeight;
+
+      input.value = "";
+
+      // Enviar mensaje al servidor
+      try {
+        const res = await fetch("/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message }),
+        });
+
+        const data = await res.json();
+
+        // Mostrar respuesta del bot
+        const botMsg = document.createElement("div");
+        botMsg.textContent = data.reply;
+        botMsg.classList.add("bot");
+        messages.appendChild(botMsg);
+        messages.scrollTop = messages.scrollHeight;
+      } catch (err) {
+        console.error("❌ Error al enviar mensaje:", err);
+      }
+    });
+  </script>
+</body>
+</html>
