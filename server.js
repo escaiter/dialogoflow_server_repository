@@ -57,3 +57,7 @@ app.listen(PORT, () => {
 // Cliente de Dialogflow con tus credenciales.
 // Esta configuración no necesita estar antes de las rutas.
 const sessionClient = new dialogflow.SessionsClient();
+
+//actualización codigos aparte
+console.log("Valor de la variable de entorno:");
+console.log(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
